@@ -21,11 +21,12 @@ class MplayerTime extends MplayerState {
 class MplayerStatus extends MplayerState {
   final PlayerStatus status;
   final SliderModel slider;
+  final Stream<Duration> positionStream;
 
-  MplayerStatus(this.status, this.slider);
+  MplayerStatus(this.status, this.slider, {this.positionStream});
 
   @override
-  List<Object> get props => [status, slider];
+  List<Object> get props => [status, slider, positionStream];
 }
 
 class MplayerLoaded extends MplayerState {
@@ -35,4 +36,14 @@ class MplayerLoaded extends MplayerState {
 
   @override
   List<int> get props => [endTime];
+}
+
+class MplayerStarted extends MplayerState {
+  final SliderModel slider;
+  final Stream<Duration> positionStream;
+
+  MplayerStarted(this.slider, {this.positionStream});
+
+  @override
+  List<Object> get props => [slider, positionStream];
 }

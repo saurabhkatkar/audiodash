@@ -26,3 +26,7 @@ class GetSongStatus extends MplayerEvent {
 }
 
 class PlayerInitilized extends MplayerEvent {}
+
+class PlayerStarted extends MplayerEvent {}
+
+class PlayerStoped extends MplayerEvent {}

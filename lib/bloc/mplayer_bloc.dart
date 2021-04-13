@@ -23,17 +23,22 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
       SliderModel slider = _fetchTimeFromSecs(event.sliderValue);
       yield MplayerTime(slider);
     } else if (event is GetSongStatus) {
+      SliderModel slider = _fetchValueFromPos();
       if (event.playerStatus == PlayerStatus.pause) {
         playerRepo.pauseMusic();
+        yield MplayerStatus(event.playerStatus, slider);
       } else {
         playerRepo.playMusic();
+        yield MplayerStatus(event.playerStatus, slider);
       }
-      SliderModel slider = _fetchValueFromPos();
-      yield MplayerStatus(event.playerStatus, slider);
     } else if (event is PlayerInitilized) {
       await playerRepo.initlizePlayer();
       int endTime = playerRepo.getEndTime();
       yield MplayerLoaded(endTime);
+    } else if (event is PlayerStarted) {
+      SliderModel slider = _fetchValueFromPos();
+      yield MplayerStarted(slider,
+          positionStream: playerRepo.getPositionStream());
     }
   }
 

@@ -28,7 +28,7 @@ class PlayerRepo {
     await player.pause();
   }
 
-  Stream<Duration> getDurationStream() {
+  Stream<Duration> getPositionStream() {
     return player.positionStream;
   }
 

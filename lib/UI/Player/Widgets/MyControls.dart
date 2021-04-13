@@ -21,6 +21,7 @@ Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
               bloc.add(GetSongStatus(status == PlayerStatus.play
                   ? PlayerStatus.pause
                   : PlayerStatus.play));
+              if (status == PlayerStatus.play) bloc.add(PlayerStarted());
             }),
         IconButton(icon: Icon(Icons.fast_forward_rounded), onPressed: () {}),
         IconButton(icon: Icon(Icons.autorenew_rounded), onPressed: () {}),

@@ -40,6 +40,9 @@ class PlayerPage extends StatelessWidget {
             return buildColumnWithData(context, state.slider);
           } else if (state is MplayerStatus) {
             return buildColumnWithData(context, state.slider);
+          } else if (state is MplayerStarted) {
+            return buildColumnWithData(context, state.slider,
+                posStream: state.positionStream);
           }
           return buildColumnWithData(context, new SliderModel(0, 0));
         }),
