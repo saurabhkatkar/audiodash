@@ -1,0 +1,1 @@
+enum PlayerStatus { play, pause }
