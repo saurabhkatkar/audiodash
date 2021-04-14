@@ -7,28 +7,37 @@ import 'package:m_player/model/SliderModel.dart';
 Column buildColumnWithData(BuildContext context, SliderModel slider,
     {Stream<Duration> posStream}) {
   Duration end = Duration(milliseconds: slider.endTime);
-  Duration pos =
-      Duration(milliseconds: ((slider.value / 100) * slider.endTime).toInt());
+  Duration pos = Duration(milliseconds: slider.value.toInt());
   return Column(
     children: [
       StreamBuilder<Duration>(
           stream: posStream ?? null,
           builder: (context, snapshot) {
             final bloc = BlocProvider.of<MplayerBloc>(context);
+
             double val = slider.value;
-            if (snapshot.hasData) {
+            if (snapshot.hasData && posStream != null) {
+              // print("Slider val is : ${slider.value}");
+
               Duration dur = snapshot.data;
-              val = (dur.inMilliseconds * 100) / end.inMilliseconds;
+
+              val = dur.inMilliseconds.toDouble();
               // print("Slider val is : $val");
-              if (val >= 100.0) bloc.add(GetSongStatus(PlayerStatus.pause));
+              if (val >= slider.endTime.toDouble())
+                bloc.add(GetSongStatus(PlayerStatus.pause));
               bloc.add(PlayerStarted());
             }
+
             return Slider(
               value: val,
               min: 0,
-              max: 100,
+              max: slider.endTime.toDouble(),
               onChanged: (double value) {
                 bloc.add(GetTimeInSec(value));
+              },
+              onChangeStart: (double value) {},
+              onChangeEnd: (double value) {
+                bloc.add(PlayerSeekMusic(value.toInt()));
               },
             );
           }),

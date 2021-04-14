@@ -30,3 +30,12 @@ class PlayerInitilized extends MplayerEvent {}
 class PlayerStarted extends MplayerEvent {}
 
 class PlayerStoped extends MplayerEvent {}
+
+class PlayerSeekMusic extends MplayerEvent {
+  final int seekPos;
+
+  PlayerSeekMusic(this.seekPos);
+
+  @override
+  List<Object> get props => [seekPos];
+}

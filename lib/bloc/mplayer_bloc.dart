@@ -20,10 +20,10 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
     MplayerEvent event,
   ) async* {
     if (event is GetTimeInSec) {
-      SliderModel slider = _fetchTimeFromSecs(event.sliderValue);
+      SliderModel slider = _fetchEnd(event.sliderValue);
       yield MplayerTime(slider);
     } else if (event is GetSongStatus) {
-      SliderModel slider = _fetchValueFromPos();
+      SliderModel slider = _fetchPosAndEnd();
       if (event.playerStatus == PlayerStatus.pause) {
         playerRepo.pauseMusic();
         yield MplayerStatus(event.playerStatus, slider);
@@ -36,7 +36,12 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
       int endTime = playerRepo.getEndTime();
       yield MplayerLoaded(endTime);
     } else if (event is PlayerStarted) {
-      SliderModel slider = _fetchValueFromPos();
+      SliderModel slider = _fetchPosAndEnd();
+      yield MplayerStarted(slider,
+          positionStream: playerRepo.getPositionStream());
+    } else if (event is PlayerSeekMusic) {
+      await playerRepo.seekMusic(event.seekPos);
+      SliderModel slider = _fetchPosAndEnd();
       yield MplayerStarted(slider,
           positionStream: playerRepo.getPositionStream());
     }
@@ -48,15 +53,13 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
     return super.close();
   }
 
-  SliderModel _fetchValueFromPos() {
+  SliderModel _fetchPosAndEnd() {
     int endTime = playerRepo.getEndTime(), posTime = playerRepo.getPosition();
-    double sliderValue = posTime * 100 / endTime;
-    return new SliderModel(sliderValue, endTime);
+    return new SliderModel(posTime.toDouble(), endTime);
   }
 
-  SliderModel _fetchTimeFromSecs(double sliderValue) {
+  SliderModel _fetchEnd(double sliderValue) {
     int endTime = playerRepo.getEndTime();
-    SliderModel slider = new SliderModel(sliderValue, endTime);
-    return slider;
+    return new SliderModel(sliderValue, endTime);
   }
 }

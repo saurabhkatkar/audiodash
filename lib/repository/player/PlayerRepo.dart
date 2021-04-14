@@ -32,6 +32,10 @@ class PlayerRepo {
     return player.positionStream;
   }
 
+  Future<void> seekMusic(int pos) async {
+    await player.seek(Duration(milliseconds: pos));
+  }
+
   Future<void> dispose() async {
     await player.stop();
     await player.dispose();
