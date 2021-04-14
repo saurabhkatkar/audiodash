@@ -40,10 +40,13 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
       yield MplayerStarted(slider,
           positionStream: playerRepo.getPositionStream());
     } else if (event is PlayerSeekMusic) {
-      await playerRepo.seekMusic(event.seekPos);
-      SliderModel slider = _fetchPosAndEnd();
-      yield MplayerStarted(slider,
-          positionStream: playerRepo.getPositionStream());
+      // playerRepo.seekMusic(event.seekPos);
+      SliderModel slider = _fetchEnd(event.seekPos.toDouble());
+      if (playerRepo.isPlaying())
+        yield MplayerStarted(slider,
+            positionStream: playerRepo.getPositionStream());
+      else
+        yield MplayerStarted(slider);
     }
   }
 

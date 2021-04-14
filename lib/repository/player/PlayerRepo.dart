@@ -4,11 +4,18 @@ class PlayerRepo {
   final player = AudioPlayer();
 
   Future<void> initlizePlayer() async {
-    var duration = await player.setUrl(
-        'https://cdnm.meln.top/mr/Ac%20%5C%20Dc%20-%20Back%20in%20Black.mp3?session_key=3baa1a275489ed599b562c88a73678d5&hash=d9e73eb5ece2fc64ea412ff2551d5b9a');
+    try {
+      //  await player.setUrl(
+      //       "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Midnight%20Tale.mp3");
+      await player.setUrl(
+          "https://srv-store6.gofile.io/download/ykD17c/fcf37a46c5b7450079e69926a975998c/BIB.mp3");
+    } catch (e) {
+      print("Error with Song Load");
+    }
   }
 
   int getEndTime() {
+    if (player.duration == null) return 0;
     Duration dur = player.duration;
     int mins = dur.inMilliseconds;
     return mins;
@@ -26,6 +33,10 @@ class PlayerRepo {
 
   Future<void> pauseMusic() async {
     await player.pause();
+  }
+
+  bool isPlaying() {
+    return player.playing;
   }
 
   Stream<Duration> getPositionStream() {

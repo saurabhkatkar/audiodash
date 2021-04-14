@@ -47,12 +47,3 @@ class MplayerStarted extends MplayerState {
   @override
   List<Object> get props => [slider, positionStream];
 }
-
-class MplayerSeekMusic extends MplayerState {
-  final SliderModel slider;
-
-  MplayerSeekMusic(this.slider);
-
-  @override
-  List<Object> get props => [slider];
-}

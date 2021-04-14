@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:m_player/bloc/mplayer_bloc.dart';
@@ -6,6 +8,8 @@ import 'package:m_player/model/SliderModel.dart';
 
 Column buildColumnWithData(BuildContext context, SliderModel slider,
     {Stream<Duration> posStream}) {
+  final bloc = BlocProvider.of<MplayerBloc>(context);
+
   Duration end = Duration(milliseconds: slider.endTime);
   Duration pos = Duration(milliseconds: slider.value.toInt());
   return Column(
@@ -13,17 +17,16 @@ Column buildColumnWithData(BuildContext context, SliderModel slider,
       StreamBuilder<Duration>(
           stream: posStream ?? null,
           builder: (context, snapshot) {
-            final bloc = BlocProvider.of<MplayerBloc>(context);
-
             double val = slider.value;
             if (snapshot.hasData && posStream != null) {
-              // print("Slider val is : ${slider.value}");
-
+              print("Slider val is : ${slider.value}");
               Duration dur = snapshot.data;
+              val =
+                  min(dur.inMilliseconds.toDouble(), slider.endTime.toDouble());
+              print("Value val is : ${val}");
 
-              val = dur.inMilliseconds.toDouble();
               // print("Slider val is : $val");
-              if (val >= slider.endTime.toDouble())
+              if (val == slider.endTime.toDouble())
                 bloc.add(GetSongStatus(PlayerStatus.pause));
               bloc.add(PlayerStarted());
             }
@@ -35,7 +38,6 @@ Column buildColumnWithData(BuildContext context, SliderModel slider,
               onChanged: (double value) {
                 bloc.add(GetTimeInSec(value));
               },
-              onChangeStart: (double value) {},
               onChangeEnd: (double value) {
                 bloc.add(PlayerSeekMusic(value.toInt()));
               },
