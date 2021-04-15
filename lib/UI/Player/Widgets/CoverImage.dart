@@ -15,8 +15,8 @@ class CoverImage extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       height: MediaQuery.of(context).size.height * 0.5,
       child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          child: Image.network(coverUrl)),
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+          child: Image.network(coverUrl, fit: BoxFit.fill,)),
     );
   }
 }

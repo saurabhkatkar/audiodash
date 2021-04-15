@@ -12,7 +12,9 @@ Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         IconButton(icon: Icon(Icons.shuffle_rounded), onPressed: () {}),
-        IconButton(icon: Icon(Icons.fast_rewind_rounded), onPressed: () {}),
+        IconButton(icon: Icon(Icons.fast_rewind_rounded), onPressed: () {
+          bloc.add(PlayerPreviousSong(status));
+        }),
         IconButton(
             icon: Icon(status == PlayerStatus.pause
                 ? Icons.play_arrow_rounded
@@ -27,7 +29,7 @@ Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
         IconButton(
             icon: Icon(Icons.fast_forward_rounded),
             onPressed: () {
-              bloc.add(PlayerNextSong());
+              bloc.add(PlayerNextSong(status));
             }),
         IconButton(icon: Icon(Icons.autorenew_rounded), onPressed: () {}),
       ],

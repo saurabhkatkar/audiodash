@@ -31,7 +31,23 @@ class PlayerStarted extends MplayerEvent {}
 
 class PlayerStoped extends MplayerEvent {}
 
-class PlayerNextSong extends MplayerEvent {}
+class PlayerPreviousSong extends MplayerEvent {
+  final PlayerStatus playerStatus;
+
+  PlayerPreviousSong(this.playerStatus);
+
+  @override
+  List<Object> get props => [playerStatus];
+}
+
+class PlayerNextSong extends MplayerEvent {
+  final PlayerStatus playerStatus;
+
+  PlayerNextSong(this.playerStatus);
+
+  @override
+  List<Object> get props => [playerStatus];
+}
 
 class PlayerSeekMusic extends MplayerEvent {
   final Duration seekPos;

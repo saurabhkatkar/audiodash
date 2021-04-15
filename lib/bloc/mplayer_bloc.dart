@@ -48,8 +48,20 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
       SongDetails song = dummyData.nextSong();
       await playerRepo.initlizePlayer(song);
       int endTime = playerRepo.getEndTime();
-      yield MplayerLoaded(endTime, song);
+      if(event.playerStatus == PlayerStatus.play) {
+        playerRepo.playMusic();
+      }
+      yield MplayerLoaded(endTime, song,playerStatus: event.playerStatus);
+    }else if (event is PlayerPreviousSong) {
+      SongDetails song = dummyData.previousSong();
+      await playerRepo.initlizePlayer(song);
+      int endTime = playerRepo.getEndTime();
+      if(event.playerStatus == PlayerStatus.play) {
+        playerRepo.playMusic();
+      }
+      yield MplayerLoaded(endTime, song,playerStatus: event.playerStatus);
     }
+
   }
 
   @override

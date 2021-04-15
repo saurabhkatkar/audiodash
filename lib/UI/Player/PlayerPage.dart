@@ -86,6 +86,8 @@ class PlayerPage extends StatelessWidget {
         }, builder: (context, state) {
           if (state is MplayerStatus) {
             return buildControlsWithData(context, state.status);
+          } else if (state is MplayerLoaded) {
+            return buildControlsWithData(context, state.playerStatus ?? PlayerStatus.pause );
           }
           return buildControlsWithData(context, PlayerStatus.pause);
         })
