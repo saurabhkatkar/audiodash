@@ -1,14 +1,13 @@
 import 'package:just_audio/just_audio.dart';
+import 'package:m_player/repository/song/SongDetails.dart';
 
 class PlayerRepo {
   final player = AudioPlayer();
 
-  Future<void> initlizePlayer() async {
+  Future<void> initlizePlayer(SongDetails song) async {
     try {
-      //  await player.setUrl(
-      //       "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Midnight%20Tale.mp3");
-      await player.setUrl(
-          "https://srv-store6.gofile.io/download/ykD17c/fcf37a46c5b7450079e69926a975998c/BIB.mp3");
+      await player?.stop();
+      await player.setUrl(song.url);
     } catch (e) {
       print("Error with Song Load");
     }

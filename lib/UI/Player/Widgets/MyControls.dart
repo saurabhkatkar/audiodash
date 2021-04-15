@@ -4,6 +4,8 @@ import 'package:m_player/bloc/mplayer_bloc.dart';
 import 'package:m_player/model/PlayerModel.dart';
 
 Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
+  final bloc = BlocProvider.of<MplayerBloc>(context);
+
   return Padding(
     padding: const EdgeInsets.only(top: 20.0),
     child: Row(
@@ -17,13 +19,16 @@ Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
                 : Icons.pause),
             iconSize: 50,
             onPressed: () {
-              final bloc = BlocProvider.of<MplayerBloc>(context);
               bloc.add(GetSongStatus(status == PlayerStatus.play
                   ? PlayerStatus.pause
                   : PlayerStatus.play));
               bloc.add(PlayerStarted());
             }),
-        IconButton(icon: Icon(Icons.fast_forward_rounded), onPressed: () {}),
+        IconButton(
+            icon: Icon(Icons.fast_forward_rounded),
+            onPressed: () {
+              bloc.add(PlayerNextSong());
+            }),
         IconButton(icon: Icon(Icons.autorenew_rounded), onPressed: () {}),
       ],
     ),

@@ -31,6 +31,8 @@ class PlayerStarted extends MplayerEvent {}
 
 class PlayerStoped extends MplayerEvent {}
 
+class PlayerNextSong extends MplayerEvent {}
+
 class PlayerSeekMusic extends MplayerEvent {
   final Duration seekPos;
 

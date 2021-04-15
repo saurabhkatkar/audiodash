@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:m_player/bloc/mplayer_bloc.dart';
 import 'package:m_player/model/PlayerModel.dart';
 import 'package:m_player/model/SliderModel.dart';
+import 'package:m_player/repository/dummy/DummyData.dart';
 import 'package:m_player/repository/player/PlayerRepo.dart';
 import 'Widgets/CoverImage.dart';
 import 'Widgets/MyControls.dart';
@@ -18,7 +19,8 @@ class PlayerPage extends StatelessWidget {
       child: Scaffold(
         body: BlocProvider(
             create: (BuildContext context) =>
-                MplayerBloc(playerRepo: PlayerRepo())..add(PlayerInitilized()),
+                MplayerBloc(playerRepo: PlayerRepo(), dummyData: DummyData())
+                  ..add(PlayerInitilized()),
             child: playerLayout()),
       ),
     );
@@ -28,9 +30,35 @@ class PlayerPage extends StatelessWidget {
     return Column(
       children: [
         MyTitleBar(),
-        CoverImage(),
-        SongName(),
-        SongArtist(),
+        BlocBuilder<MplayerBloc, MplayerState>(
+            buildWhen: (previousState, state) {
+          if (state is MplayerLoaded) {
+            return true;
+          }
+          return false;
+        }, builder: (context, state) {
+          if (state is MplayerLoaded) {
+            return Column(
+              children: [
+                CoverImage(coverUrl: state.song.coverUrl),
+                SongName(
+                  name: state.song.name,
+                ),
+                SongArtist(
+                  artist: state.song.artist,
+                ),
+              ],
+            );
+          }
+          return Column(
+            children: [
+              CoverImage(),
+              SongName(),
+              SongArtist(),
+            ],
+          );
+        }),
+
         //Build Slider with Bloc
         BlocBuilder<MplayerBloc, MplayerState>(builder: (context, state) {
           if (state is MplayerLoaded) {
@@ -51,7 +79,7 @@ class PlayerPage extends StatelessWidget {
         //Build Player Controls with Bloc
         BlocBuilder<MplayerBloc, MplayerState>(
             buildWhen: (previousState, state) {
-          if (state is MplayerStatus) {
+          if (state is MplayerStatus || state is MplayerLoaded) {
             return true;
           }
           return false;

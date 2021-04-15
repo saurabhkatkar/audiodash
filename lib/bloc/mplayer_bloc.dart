@@ -5,15 +5,18 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:m_player/model/PlayerModel.dart';
 import 'package:m_player/model/SliderModel.dart';
+import 'package:m_player/repository/dummy/DummyData.dart';
 import 'package:m_player/repository/player/PlayerRepo.dart';
+import 'package:m_player/repository/song/SongDetails.dart';
 
 part 'mplayer_event.dart';
 part 'mplayer_state.dart';
 
 class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
   final PlayerRepo playerRepo;
+  final DummyData dummyData;
 
-  MplayerBloc({@required this.playerRepo}) : super(MplayerInitial());
+  MplayerBloc({this.playerRepo, this.dummyData}) : super(MplayerInitial());
 
   @override
   Stream<MplayerState> mapEventToState(
@@ -32,14 +35,20 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
         yield MplayerStatus(event.playerStatus, slider);
       }
     } else if (event is PlayerInitilized) {
-      await playerRepo.initlizePlayer();
+      SongDetails song = dummyData.initData();
+      await playerRepo.initlizePlayer(song);
       int endTime = playerRepo.getEndTime();
-      yield MplayerLoaded(endTime);
+      yield MplayerLoaded(endTime, song);
     } else if (event is PlayerStarted) {
       SliderModel slider = _fetchPosAndEnd();
       yield MplayerStarted(slider);
     } else if (event is PlayerSeekMusic) {
       playerRepo.seekMusic(event.seekPos);
+    } else if (event is PlayerNextSong) {
+      SongDetails song = dummyData.nextSong();
+      await playerRepo.initlizePlayer(song);
+      int endTime = playerRepo.getEndTime();
+      yield MplayerLoaded(endTime, song);
     }
   }
 
