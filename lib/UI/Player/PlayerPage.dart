@@ -37,12 +37,14 @@ class PlayerPage extends StatelessWidget {
             return buildColumnWithData(
                 context, new SliderModel(0, state.endTime));
           } else if (state is MplayerTime) {
-            return buildColumnWithData(context, state.slider, posStream: null);
+            return buildColumnWithData(context, state.slider);
           } else if (state is MplayerStatus) {
             return buildColumnWithData(context, state.slider);
           } else if (state is MplayerStarted) {
-            return buildColumnWithData(context, state.slider,
-                posStream: state.positionStream);
+            return buildColumnWithData(
+              context,
+              state.slider,
+            );
           }
           return buildColumnWithData(context, new SliderModel(0, 0));
         }),

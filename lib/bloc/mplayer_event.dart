@@ -32,7 +32,7 @@ class PlayerStarted extends MplayerEvent {}
 class PlayerStoped extends MplayerEvent {}
 
 class PlayerSeekMusic extends MplayerEvent {
-  final int seekPos;
+  final Duration seekPos;
 
   PlayerSeekMusic(this.seekPos);
 
