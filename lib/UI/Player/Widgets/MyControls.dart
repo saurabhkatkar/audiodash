@@ -12,20 +12,24 @@ Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         IconButton(icon: Icon(Icons.shuffle_rounded), onPressed: () {}),
-        IconButton(icon: Icon(Icons.fast_rewind_rounded), onPressed: () {
-          bloc.add(PlayerPreviousSong(status));
-        }),
         IconButton(
-            icon: Icon(status == PlayerStatus.pause
-                ? Icons.play_arrow_rounded
-                : Icons.pause),
-            iconSize: 50,
+            icon: Icon(Icons.fast_rewind_rounded),
             onPressed: () {
-              bloc.add(GetSongStatus(status == PlayerStatus.play
-                  ? PlayerStatus.pause
-                  : PlayerStatus.play));
-              bloc.add(PlayerStarted());
+              bloc.add(PlayerPreviousSong(status));
             }),
+        RadiantGradientMask(
+          child: IconButton(
+              icon: Icon(status == PlayerStatus.pause
+                  ? Icons.play_circle_fill_rounded
+                  : Icons.pause_circle_filled_rounded),
+              iconSize: 80,
+              onPressed: () {
+                bloc.add(GetSongStatus(status == PlayerStatus.play
+                    ? PlayerStatus.pause
+                    : PlayerStatus.play));
+                bloc.add(PlayerStarted());
+              }),
+        ),
         IconButton(
             icon: Icon(Icons.fast_forward_rounded),
             onPressed: () {
@@ -35,4 +39,27 @@ Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
       ],
     ),
   );
+}
+
+class RadiantGradientMask extends StatelessWidget {
+  RadiantGradientMask({this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) => RadialGradient(
+        center: Alignment.bottomCenter,
+        stops: [
+          0.5,
+          1,
+        ],
+        colors: [
+          Colors.white,
+          Theme.of(context).accentColor,
+        ],
+      ).createShader(bounds),
+      child: child,
+    );
+  }
 }

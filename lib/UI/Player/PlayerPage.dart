@@ -17,11 +17,29 @@ class PlayerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: BlocProvider(
-            create: (BuildContext context) =>
-                MplayerBloc(playerRepo: PlayerRepo(), dummyData: DummyData())
-                  ..add(PlayerInitilized()),
-            child: playerLayout()),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              // Add one stop for each color
+              // Values should increase from 0.0 to 1.0
+              stops: [0.1, 0.3, 0.7, 0.8, 1.0],
+              colors: [
+                const Color(0xFF18171B),
+                const Color(0xFF181D22),
+                const Color(0xFF272B30),
+                const Color(0xFF35393F),
+                const Color(0xFF353638),
+              ],
+            ),
+          ),
+          child: BlocProvider(
+              create: (BuildContext context) =>
+                  MplayerBloc(playerRepo: PlayerRepo(), dummyData: DummyData())
+                    ..add(PlayerInitilized()),
+              child: playerLayout()),
+        ),
       ),
     );
   }
@@ -87,7 +105,8 @@ class PlayerPage extends StatelessWidget {
           if (state is MplayerStatus) {
             return buildControlsWithData(context, state.status);
           } else if (state is MplayerLoaded) {
-            return buildControlsWithData(context, state.playerStatus ?? PlayerStatus.pause );
+            return buildControlsWithData(
+                context, state.playerStatus ?? PlayerStatus.pause);
           }
           return buildControlsWithData(context, PlayerStatus.pause);
         })

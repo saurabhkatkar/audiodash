@@ -19,7 +19,7 @@ Widget buildColumnWithData(BuildContext context, SliderModel slider) {
           val = min(dur.inMilliseconds.toDouble(), slider.endTime.toDouble());
 
           // print("Slider val is : $val");
-          if (val == slider.endTime.toDouble())
+          if (val != 0 && val == slider.endTime.toDouble())
             bloc.add(PlayerNextSong(PlayerStatus.play));
           //To change Position Value in Label
           bloc.add(GetTimeInSec(val));
@@ -77,6 +77,7 @@ class _SeekBarState extends State<SeekBar> {
             _dragValue = null;
             widget.onChangeEnd(Duration(milliseconds: value.round()));
           },
+          activeColor: Theme.of(context).accentColor,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),

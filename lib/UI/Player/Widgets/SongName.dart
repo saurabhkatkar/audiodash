@@ -25,12 +25,34 @@ class SongName extends StatelessWidget {
               ),
             ],
           ),
-          Icon(
-            Icons.favorite,
-            size: 40,
+          RadiantGradientMask(
+            child: Icon(
+              Icons.favorite,
+              size: 40,
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class RadiantGradientMask extends StatelessWidget {
+  RadiantGradientMask({this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      shaderCallback: (bounds) => RadialGradient(
+        center: Alignment.bottomCenter,
+        radius: 0.8,
+        colors: [
+          Colors.white,
+          Theme.of(context).accentColor,
+        ],
+      ).createShader(bounds),
+      child: child,
     );
   }
 }

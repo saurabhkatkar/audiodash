@@ -17,11 +17,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
           colorScheme: ColorScheme.dark(),
-          scaffoldBackgroundColor: const Color(0xFF424242),
           primarySwatch: Colors.blue,
+          accentColor: const Color(0xFF79FFFF),
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: TextTheme()),
       home: PlayerPage(),
     );
   }
 }
+// 0xFFDD001E
+// 0xFF79FFFF
