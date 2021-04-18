@@ -1,5 +1,4 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:m_player/repository/song/SongDetails.dart';
 
 class PlayerRepo {
   // final player = AudioPlayer();
