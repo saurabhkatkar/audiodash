@@ -1,7 +1,8 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:m_player/repository/song/SongDetails.dart';
 
 class DummyData {
-  final List<SongDetails> songs = [];
+  final List<Audio> songs = [];
   static int index = 0;
 
   List<String> urls = [
@@ -30,7 +31,7 @@ class DummyData {
     "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/covers%2Fwake%20me%20up.jpg?alt=media&token=c4de478a-9810-4e20-b575-1c32dddbafa1"
   ];
 
-  List<String> names = [
+  List<String> titles = [
     "Back In Back",
     "Counting Stars",
     "Fight Song",
@@ -55,22 +56,28 @@ class DummyData {
     "Avicii"
   ];
 
-  SongDetails initData() {
+  Playlist initData() {
     for (int i = 0; i < urls.length; i++) {
-      SongDetails song =
-          new SongDetails(urls[i], names[i], artists[i], covers[i]);
+      Audio song = Audio.network(urls[i],
+          metas: Metas(
+              title: titles[i],
+              artist: artists[i],
+              image: MetasImage.network(covers[i]),
+              album: "Album"));
       songs.add(song);
     }
-    index = 0;
-    return songs[0];
+
+    final pl = Playlist(audios: songs);
+
+    return pl;
   }
 
-  SongDetails nextSong() {
+  Audio nextSong() {
     index = (index + 1) % urls.length;
     return songs[index];
   }
 
-  SongDetails previousSong() {
+  Audio previousSong() {
     index = (index - 1) % urls.length;
     return songs[index];
   }

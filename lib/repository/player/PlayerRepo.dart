@@ -1,53 +1,85 @@
-import 'package:just_audio/just_audio.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:m_player/repository/song/SongDetails.dart';
 
 class PlayerRepo {
-  final player = AudioPlayer();
+  // final player = AudioPlayer();
+  final _player = AssetsAudioPlayer();
 
-  Future<void> initlizePlayer(SongDetails song) async {
+  Future<void> initlizePlayer(Playlist playlist, Function changeNextTrack,
+      Function changePreTrack, Function changePlayerStatus) async {
     try {
-      await player?.stop();
-      await player.setUrl(song.url);
+      await _player?.stop();
+      await _player.open(playlist,
+          autoStart: false,
+          showNotification: true,
+          loopMode: LoopMode.playlist,
+          notificationSettings: NotificationSettings(
+            stopEnabled: false,
+            customPlayPauseAction: (player) async {
+              bool res = await this.isPlaying();
+              changePlayerStatus(res);
+            },
+            customNextAction: (player) {
+              changeNextTrack();
+            },
+            customPrevAction: (player) {
+              changePreTrack();
+            },
+          ));
     } catch (e) {
       print("Error with Song Load");
     }
   }
 
-  int getEndTime() {
-    if (player.duration == null) return 0;
-    Duration dur = player.duration;
+  Future<PlayingAudio> getSongDetails() async {
+    final playingAudio = await _player.current.first;
+    return playingAudio.audio;
+  }
+
+  Future<int> getEndTime() async {
+    final playingAudio = await _player.current.first;
+    if (playingAudio?.audio?.duration == null) return 0;
+    Duration dur = playingAudio.audio.duration;
     int mins = dur.inMilliseconds;
     return mins;
   }
 
-  int getPosition() {
-    Duration dur = player.position;
+  Future<int> getPosition() async {
+    Duration dur = await _player.currentPosition.first;
     int mins = dur.inMilliseconds;
     return mins;
   }
 
   void playMusic() {
-    player.play();
+    _player.play();
   }
 
   Future<void> pauseMusic() async {
-    await player.pause();
+    await _player.pause();
   }
 
-  bool isPlaying() {
-    return player.playing;
+  Future<bool> isPlaying() async {
+    return await _player.isPlaying.first;
   }
 
   Stream<Duration> getPositionStream() {
-    return player.positionStream;
+    return _player.currentPosition;
   }
 
   Future<void> seekMusic(Duration pos) async {
-    await player.seek(pos);
+    await _player.seek(pos);
+  }
+
+  Future<void> nextSong() async {
+    await _player.next();
+  }
+
+  Future<void> previousSong() async {
+    await _player.previous();
   }
 
   Future<void> dispose() async {
-    await player.stop();
-    await player.dispose();
+    await _player.stop();
+    await _player.dispose();
   }
 }

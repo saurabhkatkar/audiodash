@@ -20,7 +20,7 @@ Widget buildColumnWithData(BuildContext context, SliderModel slider) {
 
           // print("Slider val is : $val");
           if (val != 0 && val == slider.endTime.toDouble())
-            bloc.add(PlayerNextSong(PlayerStatus.play));
+            bloc.add(PlayerNextSong());
           //To change Position Value in Label
           bloc.add(GetTimeInSec(val));
         }

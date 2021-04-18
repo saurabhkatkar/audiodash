@@ -58,12 +58,12 @@ class PlayerPage extends StatelessWidget {
           if (state is MplayerLoaded) {
             return Column(
               children: [
-                CoverImage(coverUrl: state.song.coverUrl),
+                CoverImage(coverUrl: state.song.metas.image.path),
                 SongName(
-                  name: state.song.name,
+                  name: state.song.metas.title,
                 ),
                 SongArtist(
-                  artist: state.song.artist,
+                  artist: state.song.metas.artist,
                 ),
               ],
             );

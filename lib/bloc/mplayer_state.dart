@@ -30,13 +30,14 @@ class MplayerStatus extends MplayerState {
 
 class MplayerLoaded extends MplayerState {
   final int endTime;
-  final SongDetails song;
+  final Audio song;
   final PlayerStatus playerStatus;
 
-  MplayerLoaded(this.endTime, this.song, {this.playerStatus = PlayerStatus.pause});
+  MplayerLoaded(this.endTime, this.song,
+      {this.playerStatus = PlayerStatus.pause});
 
   @override
-  List<Object> get props => [endTime, song,playerStatus];
+  List<Object> get props => [endTime, song, playerStatus];
 }
 
 class MplayerStarted extends MplayerState {
@@ -47,4 +48,3 @@ class MplayerStarted extends MplayerState {
   @override
   List<Object> get props => [slider];
 }
-

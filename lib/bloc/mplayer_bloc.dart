@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +24,10 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
     MplayerEvent event,
   ) async* {
     if (event is GetTimeInSec) {
-      SliderModel slider = _fetchEnd(event.sliderValue);
+      SliderModel slider = await _fetchEnd(event.sliderValue);
       yield MplayerTime(slider);
     } else if (event is GetSongStatus) {
-      SliderModel slider = _fetchPosAndEnd();
+      SliderModel slider = await _fetchPosAndEnd();
       if (event.playerStatus == PlayerStatus.pause) {
         playerRepo.pauseMusic();
         yield MplayerStatus(event.playerStatus, slider);
@@ -35,33 +36,29 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
         yield MplayerStatus(event.playerStatus, slider);
       }
     } else if (event is PlayerInitilized) {
-      SongDetails song = dummyData.initData();
-      await playerRepo.initlizePlayer(song);
-      int endTime = playerRepo.getEndTime();
-      yield MplayerLoaded(endTime, song);
+      Playlist playlist = dummyData.initData();
+      await playerRepo.initlizePlayer(
+          playlist, changeNextTrack, changePreTrack, changePlayerStatus);
+      int endTime = await playerRepo.getEndTime();
+      yield MplayerLoaded(endTime, playlist.audios[0]);
     } else if (event is PlayerStarted) {
-      SliderModel slider = _fetchPosAndEnd();
+      SliderModel slider = await _fetchPosAndEnd();
       yield MplayerStarted(slider);
     } else if (event is PlayerSeekMusic) {
       playerRepo.seekMusic(event.seekPos);
     } else if (event is PlayerNextSong) {
-      SongDetails song = dummyData.nextSong();
-      await playerRepo.initlizePlayer(song);
-      int endTime = playerRepo.getEndTime();
-      if(event.playerStatus == PlayerStatus.play) {
-        playerRepo.playMusic();
-      }
-      yield MplayerLoaded(endTime, song,playerStatus: event.playerStatus);
-    }else if (event is PlayerPreviousSong) {
-      SongDetails song = dummyData.previousSong();
-      await playerRepo.initlizePlayer(song);
-      int endTime = playerRepo.getEndTime();
-      if(event.playerStatus == PlayerStatus.play) {
-        playerRepo.playMusic();
-      }
-      yield MplayerLoaded(endTime, song,playerStatus: event.playerStatus);
-    }
+      await playerRepo.nextSong();
+      PlayingAudio song = await playerRepo.getSongDetails();
 
+      yield MplayerLoaded(song.duration.inMilliseconds, song.audio,
+          playerStatus: PlayerStatus.play);
+    } else if (event is PlayerPreviousSong) {
+      await playerRepo.previousSong();
+      PlayingAudio song = await playerRepo.getSongDetails();
+
+      yield MplayerLoaded(song.duration.inMilliseconds, song.audio,
+          playerStatus: PlayerStatus.play);
+    }
   }
 
   @override
@@ -70,13 +67,26 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
     return super.close();
   }
 
-  SliderModel _fetchPosAndEnd() {
-    int endTime = playerRepo.getEndTime(), posTime = playerRepo.getPosition();
+  void changePlayerStatus(bool status) {
+    this.add(GetSongStatus(status ? PlayerStatus.pause : PlayerStatus.play));
+  }
+
+  void changePreTrack() async {
+    this.add(PlayerPreviousSong());
+  }
+
+  void changeNextTrack() async {
+    this.add(PlayerNextSong());
+  }
+
+  Future<SliderModel> _fetchPosAndEnd() async {
+    int endTime = await playerRepo.getEndTime(),
+        posTime = await playerRepo.getPosition();
     return new SliderModel(posTime.toDouble(), endTime);
   }
 
-  SliderModel _fetchEnd(double sliderValue) {
-    int endTime = playerRepo.getEndTime();
+  Future<SliderModel> _fetchEnd(double sliderValue) async {
+    int endTime = await playerRepo.getEndTime();
     return new SliderModel(sliderValue, endTime);
   }
 }

@@ -15,7 +15,7 @@ Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
         IconButton(
             icon: Icon(Icons.fast_rewind_rounded),
             onPressed: () {
-              bloc.add(PlayerPreviousSong(status));
+              bloc.add(PlayerPreviousSong());
             }),
         RadiantGradientMask(
           child: IconButton(
@@ -33,7 +33,7 @@ Widget buildControlsWithData(BuildContext context, PlayerStatus status) {
         IconButton(
             icon: Icon(Icons.fast_forward_rounded),
             onPressed: () {
-              bloc.add(PlayerNextSong(status));
+              bloc.add(PlayerNextSong());
             }),
         IconButton(icon: Icon(Icons.autorenew_rounded), onPressed: () {}),
       ],
