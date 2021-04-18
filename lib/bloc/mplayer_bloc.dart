@@ -8,7 +8,6 @@ import 'package:m_player/model/PlayerModel.dart';
 import 'package:m_player/model/SliderModel.dart';
 import 'package:m_player/repository/dummy/DummyData.dart';
 import 'package:m_player/repository/player/PlayerRepo.dart';
-import 'package:m_player/repository/song/SongDetails.dart';
 
 part 'mplayer_event.dart';
 part 'mplayer_state.dart';
