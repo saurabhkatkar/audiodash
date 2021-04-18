@@ -1,6 +1,6 @@
-# m_player
+# AudioDash
 
-A new Flutter project.
+A Music Player App built using BLoC State.
 
 ## Getting Started
 
