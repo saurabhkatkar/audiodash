@@ -1,4 +1,5 @@
 List<String> urls = [
+  "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/songs%2FMarshmello%20-%20Here%20With%20Me%20Feat%20CHVRCHES%20%5BAlternative%20Music%20Video%5D.webm?alt=media&token=e774777a-6dd9-4919-a6a2-c8bb1a9a63a3",
   "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/songs%2FBack%20in%20Black.mp3?alt=media&token=6bb8cc8d-ba5c-452d-a664-9f8f4753a9df",
   "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/songs%2FCounting%20Stars%20(Alex%20Goot).mp3?alt=media&token=86078c04-e87c-4ab0-9cc0-ba97eecaafaa",
   "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/songs%2FFight%20Song.mp3?alt=media&token=4d4ece87-a100-48b5-b35c-445014f6c7c3",
@@ -13,6 +14,7 @@ List<String> urls = [
 
 List<String> covers = [
   "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/covers%2Falbum4.jpg?alt=media&token=feb4c444-aa86-4d2f-bab0-744a9c0d42b7",
+  "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/covers%2Falbum4.jpg?alt=media&token=feb4c444-aa86-4d2f-bab0-744a9c0d42b7",
   "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/covers%2Fcounting%20stars.jpg?alt=media&token=54240b1b-3b8e-4ae1-8770-d4d5940aa15f",
   "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/covers%2Ffight%20song.jpg?alt=media&token=d4ac1f0b-faef-40d1-9de1-c0278042a5a7",
   "https://firebasestorage.googleapis.com/v0/b/musicplayer-be37b.appspot.com/o/covers%2Flearn%20to%20lose.jpg?alt=media&token=83e0c40e-8ab8-427d-8abd-782f26ba72f4",
@@ -25,6 +27,7 @@ List<String> covers = [
 ];
 
 List<String> titles = [
+  "Here With You",
   "Back In Back",
   "Counting Stars",
   "Fight Song",
@@ -37,6 +40,7 @@ List<String> titles = [
   "Wake Me Up"
 ];
 List<String> artists = [
+  "Marshmello",
   "AC/DC",
   "OneRepublic - Alex Goot",
   "Rachel Platten",

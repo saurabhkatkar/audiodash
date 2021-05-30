@@ -28,6 +28,13 @@ class MplayerStatus extends MplayerState {
   List<Object> get props => [status, slider];
 }
 
+class MplayerLoading extends MplayerState {
+  MplayerLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
 class MplayerLoaded extends MplayerState {
   final int endTime;
   final Audio song;

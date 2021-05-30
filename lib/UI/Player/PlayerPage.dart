@@ -4,6 +4,7 @@ import 'package:m_player/bloc/mplayer_bloc.dart';
 import 'package:m_player/model/PlayerModel.dart';
 import 'package:m_player/model/SliderModel.dart';
 import 'package:m_player/repository/dummy/DummyData.dart';
+import 'package:m_player/repository/firestore/SongsData.dart';
 import 'package:m_player/repository/player/PlayerRepo.dart';
 import 'Widgets/CoverImage.dart';
 import 'Widgets/MyControls.dart';
@@ -36,7 +37,7 @@ class PlayerPage extends StatelessWidget {
           ),
           child: BlocProvider(
               create: (BuildContext context) =>
-                  MplayerBloc(playerRepo: PlayerRepo(), dummyData: DummyData())
+                  MplayerBloc(playerRepo: PlayerRepo(), songsData: SongsData())
                     ..add(PlayerInitilized()),
               child: playerLayout()),
         ),
@@ -44,73 +45,88 @@ class PlayerPage extends StatelessWidget {
     );
   }
 
-  Column playerLayout() {
-    return Column(
-      children: [
-        MyTitleBar(),
-        BlocBuilder<MplayerBloc, MplayerState>(
-            buildWhen: (previousState, state) {
-          if (state is MplayerLoaded) {
-            return true;
-          }
-          return false;
-        }, builder: (context, state) {
-          if (state is MplayerLoaded) {
-            return Column(
-              children: [
-                CoverImage(coverUrl: state.song.metas.image.path),
-                SongName(
-                  name: state.song.metas.title,
-                ),
-                SongArtist(
-                  artist: state.song.metas.artist,
-                ),
-              ],
-            );
-          }
-          return Column(
-            children: [
-              CoverImage(),
-              SongName(),
-              SongArtist(),
-            ],
-          );
-        }),
+  Widget playerLayout() {
+    return Container(
+      child: BlocBuilder<MplayerBloc, MplayerState>(
+          buildWhen: (previousState, state) {
+        if (state is MplayerLoaded || state is MplayerLoading) {
+          return true;
+        }
+        return false;
+      }, builder: (context, state) {
+        print("State is ${state.toString()}");
+        if (state is MplayerLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-        //Build Slider with Bloc
-        BlocBuilder<MplayerBloc, MplayerState>(builder: (context, state) {
-          if (state is MplayerLoaded) {
-            return buildColumnWithData(
-                context, new SliderModel(0, state.endTime));
-          } else if (state is MplayerTime) {
-            return buildColumnWithData(context, state.slider);
-          } else if (state is MplayerStatus) {
-            return buildColumnWithData(context, state.slider);
-          } else if (state is MplayerStarted) {
-            return buildColumnWithData(
-              context,
-              state.slider,
-            );
-          }
-          return buildColumnWithData(context, new SliderModel(0, 0));
-        }),
-        //Build Player Controls with Bloc
-        BlocBuilder<MplayerBloc, MplayerState>(
-            buildWhen: (previousState, state) {
-          if (state is MplayerStatus || state is MplayerLoaded) {
-            return true;
-          }
-          return false;
-        }, builder: (context, state) {
-          if (state is MplayerStatus) {
-            return buildControlsWithData(context, state.status);
-          } else if (state is MplayerLoaded) {
-            return buildControlsWithData(
-                context, state.playerStatus ?? PlayerStatus.pause);
-          }
-          return buildControlsWithData(context, PlayerStatus.pause);
-        })
-      ],
+        return Column(
+          children: [
+            MyTitleBar(),
+            BlocBuilder<MplayerBloc, MplayerState>(
+                buildWhen: (previousState, state) {
+              if (state is MplayerLoaded) {
+                return true;
+              }
+              return false;
+            }, builder: (context, state) {
+              if (state is MplayerLoaded) {
+                return Column(
+                  children: [
+                    CoverImage(coverUrl: state.song.metas.image.path),
+                    SongName(
+                      name: state.song.metas.title,
+                    ),
+                    SongArtist(
+                      artist: state.song.metas.artist,
+                    ),
+                  ],
+                );
+              }
+              return Column(
+                children: [
+                  CoverImage(),
+                  SongName(),
+                  SongArtist(),
+                ],
+              );
+            }),
+
+            //Build Slider with Bloc
+            BlocBuilder<MplayerBloc, MplayerState>(builder: (context, state) {
+              if (state is MplayerLoaded) {
+                return buildColumnWithData(
+                    context, new SliderModel(0, state.endTime));
+              } else if (state is MplayerTime) {
+                return buildColumnWithData(context, state.slider);
+              } else if (state is MplayerStatus) {
+                return buildColumnWithData(context, state.slider);
+              } else if (state is MplayerStarted) {
+                return buildColumnWithData(
+                  context,
+                  state.slider,
+                );
+              }
+              return buildColumnWithData(context, new SliderModel(0, 0));
+            }),
+            //Build Player Controls with Bloc
+            BlocBuilder<MplayerBloc, MplayerState>(
+                buildWhen: (previousState, state) {
+              if (state is MplayerStatus || state is MplayerLoaded) {
+                return true;
+              }
+              return false;
+            }, builder: (context, state) {
+              if (state is MplayerStatus) {
+                return buildControlsWithData(context, state.status);
+              } else if (state is MplayerLoaded) {
+                return buildControlsWithData(
+                    context, state.playerStatus ?? PlayerStatus.pause);
+              }
+              return buildControlsWithData(context, PlayerStatus.pause);
+            })
+          ],
+        );
+      }),
     );
   }
 }

@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:m_player/model/PlayerModel.dart';
 import 'package:m_player/model/SliderModel.dart';
-import 'package:m_player/repository/dummy/DummyData.dart';
+import 'package:m_player/repository/firestore/SongsData.dart';
 import 'package:m_player/repository/player/PlayerRepo.dart';
 
 part 'mplayer_event.dart';
@@ -14,9 +13,9 @@ part 'mplayer_state.dart';
 
 class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
   final PlayerRepo playerRepo;
-  final DummyData dummyData;
+  final SongsData songsData;
 
-  MplayerBloc({this.playerRepo, this.dummyData}) : super(MplayerInitial());
+  MplayerBloc({this.playerRepo, this.songsData}) : super(MplayerInitial());
 
   @override
   Stream<MplayerState> mapEventToState(
@@ -35,7 +34,8 @@ class MplayerBloc extends Bloc<MplayerEvent, MplayerState> {
         yield MplayerStatus(event.playerStatus, slider);
       }
     } else if (event is PlayerInitilized) {
-      Playlist playlist = dummyData.initData();
+      yield MplayerLoading();
+      Playlist playlist = await songsData.initData();
       await playerRepo.initlizePlayer(
           playlist, changeNextTrack, changePreTrack, changePlayerStatus);
       int endTime = await playerRepo.getEndTime();
