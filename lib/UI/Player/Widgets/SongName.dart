@@ -14,16 +14,16 @@ class SongName extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            children: [
-              Text(
-                name,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline4
-                    .copyWith(color: Colors.white),
-              ),
-            ],
+          Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: Text(
+              name,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4
+                  .copyWith(color: Colors.white),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           RadiantGradientMask(
             child: Icon(
